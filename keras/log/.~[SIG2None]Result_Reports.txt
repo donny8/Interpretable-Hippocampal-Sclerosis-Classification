@@ -1,0 +1,3 @@
+AUG = None KERNEL_SEED = 2  CONVOLUTION_TYPE = 3D_BASIC  CONTROLTYPE = CCL :
+
+ batch_size : 16 
