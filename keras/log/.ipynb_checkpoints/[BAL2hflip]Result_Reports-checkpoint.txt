@@ -1,0 +1,68 @@
+AUG = hflip KERNEL_SEED = 1  CONVOLUTION_TYPE = 3D_BASIC  CONTROLTYPE = CLRM :
+
+ batch_size : 16 
+
+
+validation[80, 6, 17, 17, 23, 17, 0]
+
+validation[80, 6, 17, 17, 23, 17, 0]
+
+validation[80, 6, 17, 17, 23, 17, 0]
+
+validation[79, 5, 17, 17, 23, 17, 0]
+
+validation[77, 5, 17, 17, 22, 16, 0]maxIDx: 0, maxValue 0.278
+0, fold Max CV Accuracy: ['0.42', '0.21', '0.21', '0.24', '0.30']
+
+
+
+ Total Average Accuracy model: 0.278
+maxAccIdx 0, bestModelIdx 2
+
+ Multi Class: [0.42 0.21 0.21 0.24 0.3 ]
+ Multi Class Average: 0.276000
+
+ Softmax Probaility Sum: [0.56 0.5  0.5  0.51 0.51]
+ Soft Sum Average: 0.516000
+
+ [Multi Class Confusion]
+[16 45 49]
+Multi Class Accuracy!! 0.278
+
+
+ [Softmax Probability Sum] 
+
+ precision_score 0.508, recall_score 0.995
+f1_score 0.672, roc_auc_score 0.573
+tn 7, fp 191, fn 1, tp 197
+
+ ======== [BALANCE] ========
+
+[MULTI]
+No Left Right
+[ 7. 34. 49.]
+acc : 0.354
+
+ //NO_LEFT_RIGHT// 
+
+True Negative NO : 6.0
+False Positive NO : 162.0
+NO : 0.036
+
+True Positive Left : 83.0
+False Negative Left : 1.0
+Left : 0.988
+
+True Positive Right : 84.0
+False Negative Right : 0.0
+Right : 1.0
+
+[BINARY]
+tn fp fn tp
+[  6. 162.   1. 167.]
+acc : 0.515
+auc :0.574
+
+ Time Elapse: 0h 17m 14s 
+
+

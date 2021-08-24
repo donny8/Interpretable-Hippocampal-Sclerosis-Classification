@@ -1,0 +1,4 @@
+#!/bin/sh
+#!/bin/bash
+
+CUDA_VISIBLE_DEVICES=0 python dim_reduction.py --SEED 3 --INTEREST 16 --PERP 85 --EPSI 200 --STEP 3000 --SELECT UMAP --TRIAL 13 --CONTROLTYPE CLRM --SETT SIG
