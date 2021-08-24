@@ -1,8 +1,0 @@
-KD
-
-warm-up
-
-Oblcor - Axial 
-Axial - Oblcor finetuning
-
-Multi-Modal
