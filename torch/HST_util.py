@@ -70,12 +70,7 @@ def data_single(categories, dirDataSet):
                 img = nib.load(fname).get_fdata()
                 inputX.append(img)
                 inputY.append(label)
-    inputX = torch.tensor(inputX)
-    
-    #debug!
-    if(dirDataSet==tstDataSet):
-        inputX = inputX[:,:,:,:168]
-    
+    inputX = torch.tensor(inputX)    
     inputY = torch.tensor(inputY)
     listFileName = np.array(listFileName,dtype=object)
     return inputX, inputY, listFileName, niiInfo
@@ -468,7 +463,6 @@ def acc_roc(multi,binary,yIdxPrediction,yLabelPrediction,yPredictionB,yLabelPred
         num4=24 ; num7=48 ; num0=48        
     balance(CONTROLTYPE,SETT,TRIAL,AUG,KERNEL_SEED,iters, NO4, NO7,NO0,YES1,YES2,num4,num7,num0,Sum)
     
-#debug1
 def calbalcd(true,label,num,lst):
     check = len(true[true==num])
     if(check):
@@ -497,7 +491,6 @@ def balance(CONTROLTYPE,SETT,TRIAL,AUG,KERNEL_SEED,iters, C4,C7,C0,C1,C2,num4,nu
     tnn_set = [] ; fpn_set = [] ; tpl_set = [] ; fnl_set = [] ; tpr_set = [] ; fnr_set = []
     sens = [] ; spec = [] ; f1_scores = []
     
-    # debug1
     M0s = []  ;  M4s = [] ; M7s = []
     B0s = []  ;  B4s = [] ; B7s = []
     Y_true_M[:C4] = 4
@@ -509,7 +502,6 @@ def balance(CONTROLTYPE,SETT,TRIAL,AUG,KERNEL_SEED,iters, C4,C7,C0,C1,C2,num4,nu
         M_true, M_label         = random_sample(idx4,idx7,idx0,idx1,idx2,num4,num7,num0, Y_true_M, yPrediction_M, yLabelPrediction_M,'M' )
         B_true, B_label, B_pred = random_sample(idx4,idx7,idx0,idx1,idx2,num4,num7,num0, Y_true_B, yPrediction_B, yLabelPrediction_B,'B' )
         
-        #debug3
         M0s = calbalcd(M_true,M_label,0,M0s)
         M4s = calbalcd(M_true,M_label,4,M4s)
         M7s = calbalcd(M_true,M_label,7,M7s)
