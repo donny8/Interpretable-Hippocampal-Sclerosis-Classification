@@ -77,47 +77,34 @@ We trained, validated and tested the framework using the Hippocamapl Sclerosis (
 		3dcalc -a $BFcor_image -b $mask_image -expr 'a*step(b)' -prefix $SS_image
     ```
 
-We provided this bash pipeline (Data_preprocessing/Preprocessing.sh) to perform this step :
-```
-bash Preprocessing.sh
-```
+    We provided this bash pipeline (Data_preprocessing/Preprocessing.sh) to perform this step :
+    ```
+    bash Preprocessing.sh
+    ```
 
 #### 3. Registration onto [the standard brain template](http://www.bic.mni.mcgill.ca/~vfonov/icbm/2009/mni_icbm152_nlin_sym_09a_nifti.zip) using flirt function (need FSL to be installed):
 
-    Register the skull stripped brain onto the the MNI brain template.
-    Use flirt function (need FSL to be installed.)
-    ```
-    flirt -in $SS_image -ref zMNI_1x1x1_brain.nii.gz -out $image_MNI -omat $MNI_mat -dof 12
-    ```
+Register the skull stripped brain onto the the MNI brain template.
+Use flirt function (need FSL to be installed.)
+
+```
+flirt -in $SS_image -ref zMNI_1x1x1_brain.nii.gz -out $image_MNI -omat $MNI_mat -dof 12
+```
     
-    We provided this bash pipeline (Data_preprocessing/Registration_MNI.sh) to perform this step :
-    ```
-    bash Registration_MNI.sh
-    ```
+We provided this bash pipeline (Data_preprocessing/Registration_MNI.sh) to perform this step :
+
+```
+bash Registration_MNI.sh
+```
 
 
-* **step4: background removal** 
+#### 4. Background Removal:
+Background outside the brain still exists in the MRI. The redundancy increases the data volume and correspondingly makes the model consider unnecessarily additional region. We explored the data to see the general boundary of the background region in all 3 dimensions and cut the data in the extent. To do this step, run a python file in "/Data_preprocessing" folder :
     
-    Background signals outside the skull exist in the MRI. We set all background voxels with the same intensity (value=-1) to decrease the incluence of background signals. The general idea of doing background removal is using the Depth First Search with corners as starting points, then gradually filling out the searched background regions, until it reach outer bright sphere signals from skull fat. To run this step:
+```
+python back_remove.py
+```
     
-    ```
-    python back_remove.py folder_for_prev_outcome_after_step123/ folder_for_final_output_of_step4/
-    ```
-    The background mask looks like below:
-    
-    
-    To register all data in a folder, you can use the python script (Data_Preprocess/registration.py) in which calls the registration.sh.
-    ```
-    python registration.py folder_of_raw_data/ folder_for_processed_data/
-    
-
-#### 2. processing step for post-analysis on regional correlation between neuropath outcome and FCN prediction:
-    
-  * We performed subcortical segmentation using FreeSurfer (need to be installed) on those 11 FHS cases where neuropath data is available. To do the subcortical segmentation, you need to firstly do "recon-all" step using the freesurfer and then run the bash script below to get the final outcome: 
-      ```
-      bash segment_combine_label.sh
-      ``` 
-
 <p align="center">
   <img src="plot/Fig_1A.png" height="225"/> 
 </p>
@@ -126,47 +113,72 @@ bash Preprocessing.sh
 
 The tool was developped based on the following packages:
 
-1. PyTorch (1.1 or greater).
-2. NumPy (1.16 or greater).
-3. matplotlib (3.0.3 or greater)
-4. tqdm (4.31 or greater).
-5. FSL 
+1. NumPy (1.15.4 or greater).
+2. Tensorflow (1.12.0).
+3. Keras (2.2.0).
+4. PyTorch (1.4.0 or greater).
+5. Nibabel (3.0.2)
+6. AFNI 
+7. FSL
 
-Please note that the dependencies may require Python 3.6 or greater. It is recommemded to install and maintain all packages by using [`conda`](https://www.anaconda.com/) or [`pip`](https://pypi.org/project/pip/). For the installation of GPU accelerated PyTorch, additional effort may be required. Please check the official websites of [PyTorch](https://pytorch.org/get-started/locally/) and [CUDA](https://developer.nvidia.com/cuda-downloads) for detailed instructions.
+Please note that the dependencies may require Python 3.5 or greater. It is recommemded to install and maintain all packages by using [`conda`](https://www.anaconda.com/) or [`pip`](https://pypi.org/project/pip/). For the installation of GPU accelerated PyTorch, additional effort may be required. Please check the official websites of [PyTorch](https://pytorch.org/get-started/locally/) and [CUDA](https://developer.nvidia.com/cuda-downloads) for detailed instructions. The keras code was implemented on this [Docker](https://hub.docker.com/r/tensorflow/tensorflow/tags?page=1&ordering=last_updated&name=12.0).
 
 
-### Train, validate and test FCN and CNN models 
+### Train, validate and test the CNN models 
 
+For Keras,
 ```
-python main.py
-```
-
-In the main.py, run function 'fcn_main' will do number of repeat time indepentent FCN model training on random splitted data. Model performance is thus evaluated on all runs as mean +/- std. Disease probability maps will be automatically generated for each independent run in the following folders:
-
-```
-DPMs/fcn_exp0/
-DPMs/fcn_exp1/
-...
-DPMs/fcn_expN/
+python HS_main.py --CONTROLTYPE CLRM --SETT SIG --AUG hflip --KERNEL_SEED 1 --TRIAL 1 --DATATYPE 64 --BATCH 16 --MODEL 3D_BASIC5124 --FC1 64 --FC2 64 
 ```
 
-Model weights and predicted raw scores on each subjects will be saved in:
-
+For Pytorch,
 ```
-ckeckpoint_dir/fcn_exp0/
-ckeckpoint_dir/fcn_exp1/
-...
-ckeckpoint_dir/fcn_expN/
+python HST_main.py --CONTROLTYPE CLRM --SETT SIG --AUG hflip --KERNEL_SEED 3 --TRIAL 03 --DATATYPE 60 --BATCH 42 --MODEL 3D_5124 --step 50 --TALK M5124_3 --drop 1
 ```
 
-Similarly, run function 'cnn_main' will do number of repeat time indepentent CNN model training on random splitted data. Model performance is thus evaluated on all runs as mean +/- std. Results will be saved in the similiar way as FCN.  
+Descriptions for each option are described in the "/Args/argument.py".
 
-### Train, validate and test MLP models 
+Model weights will be saved in "/saveModel" folder and the evaluation result will be saved in "/log" and "/graph" folder.
+
+### 5-Models Ensemble : Average and Voting 
+
+For Keras,
+```
+CUDA_VISIBLE_DEVICES=1 python HS_ensemble.py --AUG hflip --TRIAL 9 --SETT SIG --DATATYPE 64 --CONTROLTYPE CLRM --EnsMODE AVR --KERNEL_SEED 1
+```
+
+For Pytorch,
+```
+CUDA_VISIBLE_DEVICES=0 python HST_ensemble.py --CONTROLTYPE CLRM --SETT SIG --AUG hflip --KERNEL_SEED 333 --TRIAL 45 --DATATYPE 60 --BATCH 42 --MODEL 3D_5124 --step 50 --TALK AVR_ensemble --K1 2  --K2 14 --K3 19 --K4 23 --K5 33 --EnsMODE AVR
+```
+
+EnsMODE controls the ensemble mode.
+
+Two options are given : 'AVR' for average ensemble and 'VOT' for voting ensemble
+
+### Interpretations using LRP and UMAP
+
+#### Layerwise-Relevance Propagation
+For Keras,
+```
+python HS_LRP.py --SETT SIG --TRIAL 1 --RULE lrp.z --KERNEL_SEED 1 --CONTROLTYPE CLRM --AUG hflip --DATATYPE 64 --PERCENT 5 --LRPMSG Directory_name
+```
+    
+For Pytorch,
+```
+python HST_lrp.py --SETT SIG --TRIAL 03 --RULE lrp.z --KERNEL_SEED 14 --CONTROLTYPE CLRM --AUG hflip --DATATYPE 60 --PERCENT 0 --LRPMSG Directory_name --MODEL 3D_5124
+```
+
+Controls the cutoff values using the PERCENT.
+
+In both codes, we set all voxels with negative relevances with zero and normalize them to be in range 0 ~ 100.
+
+#### Uniform Manifold Approximation and Projection
+In keras/graph folder,
 
 ```
-python mlp_classifiers.py
+python dim_reduction.py --SEED 3 --INTEREST 16 --PERP 85 --EPSI 200 --STEP 3000 --SELECT UMAP --TRIAL 13 --CONTROLTYPE CLRM --SETT SIG
 ```
-Inside mlp_classifiers.py, various MLP models will be trained on different type of features, for more details, please see the comments in the script and refer to our paper. 
+You may adjust the hyperparameters like perplexity or step to achieve different outcomes.
 
-
-
+The result would be saved in "/keras/graph/UMAP" folder.
