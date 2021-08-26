@@ -144,12 +144,12 @@ Model weights will be saved in "/saveModel" folder and the evaluation result wil
 
 For Keras,
 ```
-CUDA_VISIBLE_DEVICES=1 python HS_ensemble.py --AUG hflip --TRIAL 9 --SETT SIG --DATATYPE 64 --CONTROLTYPE CLRM --EnsMODE AVR --KERNEL_SEED 1
+python HS_ensemble.py --AUG hflip --TRIAL 9 --SETT SIG --DATATYPE 64 --CONTROLTYPE CLRM --EnsMODE AVR --KERNEL_SEED 1
 ```
 
 For Pytorch,
 ```
-CUDA_VISIBLE_DEVICES=0 python HST_ensemble.py --CONTROLTYPE CLRM --SETT SIG --AUG hflip --KERNEL_SEED 333 --TRIAL 45 --DATATYPE 60 --BATCH 42 --MODEL 3D_5124 --step 50 --TALK AVR_ensemble --K1 2  --K2 14 --K3 19 --K4 23 --K5 33 --EnsMODE AVR
+python HST_ensemble.py --CONTROLTYPE CLRM --SETT SIG --AUG hflip --KERNEL_SEED 333 --TRIAL 45 --DATATYPE 60 --BATCH 42 --MODEL 3D_5124 --step 50 --TALK AVR_ensemble --K1 2  --K2 14 --K3 19 --K4 23 --K5 33 --EnsMODE AVR
 ```
 
 EnsMODE controls the ensemble mode.
