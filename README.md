@@ -174,7 +174,7 @@ Controls the cutoff values using the PERCENT.
 In both codes, we set all voxels with negative relevances with zero and normalize them to be in range 0 ~ 100.
 
 ### Uniform Manifold Approximation and Projection
-In keras/graph folder,
+In "keras/graph" folder,
 
 ```
 python dim_reduction.py --SEED 3 --INTEREST 16 --PERP 85 --EPSI 200 --STEP 3000 --SELECT UMAP --TRIAL 13 --CONTROLTYPE CLRM --SETT SIG
