@@ -38,16 +38,16 @@ We applied a dimension reduction method called Uniform manifold approximation an
 
 Please refer to our paper for more details. 
 
-### Data
+## Data
 
 We trained, validated and tested the framework using the Hippocamapl Sclerosis (HS) dataset from the Seoul National University Hospital. To download the raw data, please contact those affiliations directly. We provided all data preprocessing manuscripts in "./Data_preprocessing/" folder. 
 
-### Preprocessing
+## Preprocessing
 
-#### 1. Preprocessing steps for converting Dicom to Nifti format
+### 1. Preprocessing steps for converting Dicom to Nifti format
   We used the [MRIcroGL](https://www.nitrc.org/projects/mricrogl) program to convert the MRI file in Dicom format to Nifti format 
 
-#### 2. Preprocessing steps for Skull Stripping:
+### 2. Preprocessing steps for Skull Stripping:
 
 * **step1: Deoblique the data using AFNI 3drefit function** (need AFNI to be installed). 
 
@@ -82,7 +82,7 @@ We trained, validated and tested the framework using the Hippocamapl Sclerosis (
     bash Preprocessing.sh
     ```
 
-#### 3. Registration onto [the standard brain template](http://www.bic.mni.mcgill.ca/~vfonov/icbm/2009/mni_icbm152_nlin_sym_09a_nifti.zip) using flirt function (need FSL to be installed):
+### 3. Registration onto [the standard brain template](http://www.bic.mni.mcgill.ca/~vfonov/icbm/2009/mni_icbm152_nlin_sym_09a_nifti.zip) using flirt function (need FSL to be installed):
 
 Register the skull stripped brain onto the the MNI brain template.
 Use flirt function (need FSL to be installed.)
@@ -98,7 +98,7 @@ bash Registration_MNI.sh
 ```
 
 
-#### 4. Background Removal:
+### 4. Background Removal:
 Background outside the brain still exists in the MRI. The redundancy increases the data volume and correspondingly makes the model consider unnecessarily additional region. We explored the data to see the general boundary of the background region in all 3 dimensions and cut the data in the extent. To do this step, run a python file in "/Data_preprocessing" folder :
     
 ```
@@ -109,7 +109,7 @@ python back_remove.py
   <img src="plot/Fig_1A.png" height="225"/> 
 </p>
 
-### Code dependencies
+## Code dependencies
 
 The tool was developped based on the following packages:
 
@@ -124,7 +124,7 @@ The tool was developped based on the following packages:
 Please note that the dependencies may require Python 3.5 or greater. It is recommemded to install and maintain all packages by using [`conda`](https://www.anaconda.com/) or [`pip`](https://pypi.org/project/pip/). For the installation of GPU accelerated PyTorch, additional effort may be required. Please check the official websites of [PyTorch](https://pytorch.org/get-started/locally/) and [CUDA](https://developer.nvidia.com/cuda-downloads) for detailed instructions. The keras code was implemented on this [Docker](https://hub.docker.com/r/tensorflow/tensorflow/tags?page=1&ordering=last_updated&name=12.0).
 
 
-### Train, validate and test the CNN models 
+## Train, validate and test the CNN models 
 
 For Keras,
 ```
@@ -140,7 +140,7 @@ Descriptions for each option are described in the "/Args/argument.py".
 
 Model weights will be saved in "/saveModel" folder and the evaluation result will be saved in "/log" and "/graph" folder.
 
-### 5-Models Ensemble : Average and Voting 
+## 5-Models Ensemble : Average and Voting 
 
 For Keras,
 ```
@@ -156,9 +156,9 @@ EnsMODE controls the ensemble mode.
 
 Two options are given : 'AVR' for average ensemble and 'VOT' for voting ensemble
 
-### Interpretations using LRP and UMAP
+## Interpretations using LRP and UMAP
 
-#### Layerwise-Relevance Propagation
+### Layerwise-Relevance Propagation
 For Keras,
 ```
 python HS_LRP.py --SETT SIG --TRIAL 1 --RULE lrp.z --KERNEL_SEED 1 --CONTROLTYPE CLRM --AUG hflip --DATATYPE 64 --PERCENT 5 --LRPMSG Directory_name
@@ -173,7 +173,7 @@ Controls the cutoff values using the PERCENT.
 
 In both codes, we set all voxels with negative relevances with zero and normalize them to be in range 0 ~ 100.
 
-#### Uniform Manifold Approximation and Projection
+### Uniform Manifold Approximation and Projection
 In keras/graph folder,
 
 ```
