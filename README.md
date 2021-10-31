@@ -19,8 +19,8 @@ The CNN model was developed on the HS dataset that was provided by the Seoul Nat
 The training dataset was comprised 160 controls, 100 Left and 60 Right HS participants, and the test dataset was consisted of 252 control, 25 Left and 25 Right HS participants. Since the test dataset was imbalanced, we randomly sampled 25 and 50 participants from the control group 100 times to make a balanced test datasets for multi-class and binary classification. Since the test dataset was imbalanced, we randomly sampled 25 and 50 participants from the control group 100 times to make a balanced test datasets for multi-class and binary classification. We employed the average and voting ensemble methods to improve the prediction accuracy. For the test dataset, we plot the accuracies among several single models and their ensemble, and the average ROC curve of the Voting Ensemble method for the multi-class and binary classification settings, respectively.
 
 <p align="center">
-  <img src="plot/Table_1.png" height="280"/> <img src="plot/Fig_2A.png" height="280"/>
-  <img src="plot/Table_2.png" height="280"/> <img src="plot/Fig_2B.png" height="280"/>
+  <img src="plot/Table_1.png" height="300"/> <img src="plot/Fig_2A.png" height="300"/>
+  <img src="plot/Table_2.png" height="300"/> <img src="plot/Fig_2B.png" height="300"/>
 </p>
 
 Once the model makes a prediction for a given individual 3D brain image, LRP recursively runs the relevance propagation step, which is similar to the standard back-propagation for neural networks training, to decompose and distribute the final prediction score to each input voxel. The decomposed score, dubbed as the relevance score, of LRP represents the importance of each voxel for the given prediction, and we obtain the saliency-map of the important voxels by visualizing the relevance scores higher than an appropriate threshold. We presented the interpretation both in individual and group-level.
