@@ -1,0 +1,10 @@
+cff-version: 1.0
+message: "If you refer this repository, please cite it as below."
+authors:
+  - family-names: Kim
+    given-names: Dohyun
+    orcid: 
+title: "Interpretable Deep Learning based Hippocampal Sclerosis Classification"
+version: 1.0
+doi: 
+date-released: 2021-08-11
