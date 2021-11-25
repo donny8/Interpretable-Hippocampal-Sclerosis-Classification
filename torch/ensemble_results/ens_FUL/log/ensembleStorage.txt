@@ -1,0 +1,120 @@
+
+
+TRIAL 27  SETT FUL  DATATYPE 60  CONTROLTYPE CLRM  EnsMODE VOT Kernels[[2, 14, 19, 22, 23, 33]]
+
+
+ [Multi Class]
+[218  23  24]
+Accuracy! 0.877
+Folds:['78.48', '83.11', '83.11', '85.43', '83.44', '85.43']
+
+ [Binary Class]
+tn 215, fp 37, fn 3, tp 47
+Accuracy! 0.868
+Folds:['77.48', '83.11', '82.78', '84.11', '82.78', '85.43']
+
+Sensitivity : 0.940
+Specificity : 0.853
+F1_score : 0.701
+AUROC : 0.933
+
+ ======== [BALANCE] ========
+
+[Multi Control]
+Zero: 0.90
+Four: 0.742
+Seven: 0.793
+
+[Binary Control]
+Zero: 0.91
+Four: 0.657
+Seven: 0.798
+
+
+[MULTI]
+No Left Right
+[20.7 23.  24. ]
+Accuracy : 0.902
+
+[BINARY]
+tn fp fn tp
+[41.  9.  3. 47.]
+Accuracy : 0.88
+Sensitivity : 0.940
+Specificity : 0.813
+F1-score : 0.884
+AUROC :0.916
+
+True Negative NO : 40.6
+False Positive NO : 9.4
+NO : 0.812
+
+True Positive Left : 23.0
+False Negative Left : 2.0
+Left : 0.92
+
+True Positive Right : 24.0
+False Negative Right : 1.0
+Right : 0.96
+Time Elapse: 0h 11m 51s 
+
+
+
+TRIAL 27  SETT FUL  DATATYPE 60  CONTROLTYPE CLRM  EnsMODE AVR Kernels[[2, 14, 19, 22, 23, 33]]
+
+
+ [Multi Class]
+[211  23  24]
+Accuracy! 0.854
+Folds:['78.48', '83.11', '83.11', '85.43', '83.44', '85.43']
+
+ [Binary Class]
+tn 209, fp 43, fn 3, tp 47
+Accuracy! 0.848
+Folds:['77.48', '83.11', '82.78', '84.11', '82.78', '85.43']
+
+Sensitivity : 0.940
+Specificity : 0.829
+F1_score : 0.671
+AUROC : 0.959
+
+ ======== [BALANCE] ========
+
+[Multi Control]
+Zero: 0.88
+Four: 0.598
+Seven: 0.766
+
+[Binary Control]
+Zero: 0.89
+Four: 0.527
+Seven: 0.778
+
+
+[MULTI]
+No Left Right
+[19.5 23.  24. ]
+Accuracy : 0.887
+
+[BINARY]
+tn fp fn tp
+[39. 11.  3. 47.]
+Accuracy : 0.86
+Sensitivity : 0.940
+Specificity : 0.771
+F1-score : 0.867
+AUROC :0.948
+
+True Negative NO : 38.6
+False Positive NO : 11.4
+NO : 0.772
+
+True Positive Left : 23.0
+False Negative Left : 2.0
+Left : 0.92
+
+True Positive Right : 24.0
+False Negative Right : 1.0
+Right : 0.96
+Time Elapse: 0h 11m 45s 
+

@@ -1,0 +1,21 @@
+
+
+(AUG='hflip', BATCH=42, CONTROLTYPE='CLRM', DATATYPE=60, ENDEPOCH=150, EnsMODE='None', FULEPOCH=67, K=None, KERNEL_SEED=23, LRPMSG='Obl', MODEL='3D_5124', MOM=0.4515840899531089, OPT='SGD', PERCENT=5, RULE='None', SCH='RLRP', SETT='FUL', TALK='HSCNN_reprod_86', TRIAL=27, debug=0, ksize=4, lr=0.022103904768924553, lreduce=0.12440992328892261, lrperiod=6, mgpu=0, wdecay=0.0009429878814002599)  FULEPOCH 67
+
+
+ [Multi Class]
+[206  21  25]
+Accuracy! 0.834
+Folds:[83.44370860927152]
+
+ [Binary Class]
+tn 202, fp 50, fn 2, tp 48
+Accuracy! 0.828
+Folds:[82.78145695364239]
+
+Sensitivity : 0.960
+Specificity : 0.802
+F1_score : 0.649
+AUROC : 0.956
+Time Elapse: 0h 14m 0s 
+

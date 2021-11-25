@@ -1,0 +1,120 @@
+
+
+TRIAL 17  SETT SIG  DATATYPE 60  CONTROLTYPE CLRM  EnsMODE VOT Kernels[[2, 14, 19, 22, 23, 33]]
+
+
+ [Multi Class]
+[146  87  47]
+Accuracy! 0.875
+Folds:['82.81', '89.06', '89.06', '89.06', '92.19', '84.38', '87.50', '85.94', '82.81', '87.50', '85.94', '90.62', '79.69', '75.00', '75.00', '73.44', '81.25', '71.88', '93.75', '93.75', '89.06', '90.62', '87.50', '92.19', '90.62', '84.38', '89.06', '87.50', '84.38', '85.94']
+
+ [Binary Class]
+tn 144, fp 16, fn 20, tp 140
+Accuracy! 0.887
+Folds:['84.38', '90.62', '87.50', '87.50', '90.62', '87.50', '87.50', '89.06', '84.38', '87.50', '85.94', '90.62', '84.38', '79.69', '81.25', '79.69', '81.25', '78.12', '93.75', '93.75', '89.06', '92.19', '89.06', '92.19', '92.19', '85.94', '87.50', '87.50', '85.94', '85.94']
+
+Sensitivity : 0.875
+Specificity : 0.900
+F1_score : 0.886
+AUROC : 0.931
+
+ ======== [BALANCE] ========
+
+[Multi Control]
+Zero: 0.91
+Four: 0.897
+Seven: 0.925
+
+[Binary Control]
+Zero: 0.89
+Four: 0.859
+Seven: 0.920
+
+
+[MULTI]
+No Left Right
+[54.8 52.1 47. ]
+Accuracy : 0.855
+
+[BINARY]
+tn fp fn tp
+[108.  12.  16. 104.]
+Accuracy : 0.883
+Sensitivity : 0.868
+Specificity : 0.896
+F1-score : 0.880
+AUROC :0.927
+
+True Negative NO : 107.5
+False Positive NO : 12.5
+NO : 0.896
+
+True Positive Left : 54.1
+False Negative Left : 5.9
+Left : 0.902
+
+True Positive Right : 50.0
+False Negative Right : 10.0
+Right : 0.833
+Time Elapse: 0h 24m 14s 
+
+
+
+TRIAL 17  SETT SIG  DATATYPE 60  CONTROLTYPE CLRM  EnsMODE AVR Kernels[[2, 14, 19, 22, 23, 33]]
+
+
+ [Multi Class]
+[141  88  47]
+Accuracy! 0.863
+Folds:['82.81', '89.06', '89.06', '89.06', '92.19', '84.38', '87.50', '85.94', '82.81', '87.50', '85.94', '90.62', '79.69', '75.00', '75.00', '73.44', '81.25', '71.88', '93.75', '93.75', '89.06', '90.62', '87.50', '92.19', '90.62', '84.38', '89.06', '87.50', '84.38', '85.94']
+
+ [Binary Class]
+tn 139, fp 21, fn 19, tp 141
+Accuracy! 0.875
+Folds:['84.38', '90.62', '87.50', '87.50', '90.62', '87.50', '87.50', '89.06', '84.38', '87.50', '85.94', '90.62', '84.38', '79.69', '81.25', '79.69', '81.25', '78.12', '93.75', '93.75', '89.06', '92.19', '89.06', '92.19', '92.19', '85.94', '87.50', '87.50', '85.94', '85.94']
+
+Sensitivity : 0.881
+Specificity : 0.869
+F1_score : 0.876
+AUROC : 0.948
+
+ ======== [BALANCE] ========
+
+[Multi Control]
+Zero: 0.90
+Four: 0.752
+Seven: 0.925
+
+[Binary Control]
+Zero: 0.89
+Four: 0.753
+Seven: 0.892
+
+
+[MULTI]
+No Left Right
+[52.7 52.9 47. ]
+Accuracy : 0.848
+
+[BINARY]
+tn fp fn tp
+[104.  16.  15. 105.]
+Accuracy : 0.871
+Sensitivity : 0.872
+Specificity : 0.863
+F1-score : 0.868
+AUROC :0.942
+
+True Negative NO : 103.6
+False Positive NO : 16.4
+NO : 0.863
+
+True Positive Left : 54.6
+False Negative Left : 5.4
+Left : 0.91
+
+True Positive Right : 50.0
+False Negative Right : 10.0
+Right : 0.833
+Time Elapse: 0h 24m 12s 
+

@@ -1,0 +1,420 @@
+
+
+(AUG='hflip', BATCH=42, CONTROLTYPE='CLRM', DATATYPE=60, ENDEPOCH=150, EnsMODE='None', FULEPOCH=101, K=None, KERNEL_SEED=14, LRPMSG='Obl', MODEL='3D_5124', MOM=0.4515840899531089, OPT='SGD', PERCENT=5, RULE='None', SCH='RLRP', SETT='FUL', TALK='HSCNN_reprod_86', TRIAL=27, debug=0, ksize=4, lr=0.022103904768924553, lreduce=0.12440992328892261, lrperiod=6, mgpu=0, wdecay=0.0009429878814002599)  FULEPOCH 101
+
+
+ [Multi Class]
+[204  22  25]
+Accuracy! 0.831
+Folds:[83.11258278145695]
+
+ [Binary Class]
+tn 203, fp 49, fn 2, tp 48
+Accuracy! 0.831
+Folds:[83.11258278145695]
+
+Sensitivity : 0.960
+Specificity : 0.806
+F1_score : 0.653
+AUROC : 0.945
+
+ ======== [BALANCE] ========
+
+[Multi Control]
+Zero: 0.84
+Four: 0.728
+Seven: 0.745
+
+[Binary Control]
+Zero: 0.84
+Four: 0.733
+Seven: 0.737
+
+
+[MULTI]
+No Left Right
+[19.5 22.  25. ]
+Accuracy : 0.886
+
+[BINARY]
+tn fp fn tp
+[39. 11.  2. 48.]
+Accuracy : 0.87
+Sensitivity : 0.960
+Specificity : 0.776
+F1-score : 0.879
+AUROC :0.933
+
+True Negative NO : 38.8
+False Positive NO : 11.2
+NO : 0.776
+
+True Positive Left : 23.0
+False Negative Left : 2.0
+Left : 0.92
+
+True Positive Right : 25.0
+False Negative Right : 0.0
+Right : 1.0
+Time Elapse: 0h 13m 42s 
+
+
+
+(AUG='hflip', BATCH=42, CONTROLTYPE='CLRM', DATATYPE=60, ENDEPOCH=150, EnsMODE='None', FULEPOCH=101, K=None, KERNEL_SEED=19, LRPMSG='Obl', MODEL='3D_5124', MOM=0.4515840899531089, OPT='SGD', PERCENT=5, RULE='None', SCH='RLRP', SETT='FUL', TALK='HSCNN_reprod_86', TRIAL=27, debug=0, ksize=4, lr=0.022103904768924553, lreduce=0.12440992328892261, lrperiod=6, mgpu=0, wdecay=0.0009429878814002599)  FULEPOCH 101
+
+
+ [Multi Class]
+[206  23  22]
+Accuracy! 0.831
+Folds:[83.11258278145695]
+
+ [Binary Class]
+tn 204, fp 48, fn 4, tp 46
+Accuracy! 0.828
+Folds:[82.78145695364239]
+
+Sensitivity : 0.920
+Specificity : 0.810
+F1_score : 0.639
+AUROC : 0.945
+
+ ======== [BALANCE] ========
+
+[Multi Control]
+Zero: 0.88
+Four: 0.582
+Seven: 0.762
+
+[Binary Control]
+Zero: 0.84
+Four: 0.569
+Seven: 0.747
+
+
+[MULTI]
+No Left Right
+[19.3 23.  22. ]
+Accuracy : 0.857
+
+[BINARY]
+tn fp fn tp
+[38. 12.  4. 46.]
+Accuracy : 0.84
+Sensitivity : 0.920
+Specificity : 0.750
+F1-score : 0.848
+AUROC :0.927
+
+True Negative NO : 37.5
+False Positive NO : 12.5
+NO : 0.75
+
+True Positive Left : 23.0
+False Negative Left : 2.0
+Left : 0.92
+
+True Positive Right : 23.0
+False Negative Right : 2.0
+Right : 0.92
+Time Elapse: 0h 14m 14s 
+
+
+
+(AUG='hflip', BATCH=42, CONTROLTYPE='CLRM', DATATYPE=60, ENDEPOCH=150, EnsMODE='None', FULEPOCH=75, K=None, KERNEL_SEED=22, LRPMSG='Obl', MODEL='3D_5124', MOM=0.4515840899531089, OPT='SGD', PERCENT=5, RULE='None', SCH='RLRP', SETT='FUL', TALK='HSCNN_reprod_86', TRIAL=27, debug=0, ksize=4, lr=0.022103904768924553, lreduce=0.12440992328892261, lrperiod=6, mgpu=0, wdecay=0.0009429878814002599)  FULEPOCH 75
+
+
+ [Multi Class]
+[212  23  23]
+Accuracy! 0.854
+Folds:[85.43046357615894]
+
+ [Binary Class]
+tn 207, fp 45, fn 3, tp 47
+Accuracy! 0.841
+Folds:[84.10596026490066]
+
+Sensitivity : 0.940
+Specificity : 0.821
+F1_score : 0.662
+AUROC : 0.956
+
+ ======== [BALANCE] ========
+
+[Multi Control]
+Zero: 0.90
+Four: 0.530
+Seven: 0.774
+
+[Binary Control]
+Zero: 0.88
+Four: 0.544
+Seven: 0.765
+
+
+[MULTI]
+No Left Right
+[19.3 23.  23. ]
+Accuracy : 0.871
+
+[BINARY]
+tn fp fn tp
+[38. 12.  3. 47.]
+Accuracy : 0.85
+Sensitivity : 0.940
+Specificity : 0.768
+F1-score : 0.866
+AUROC :0.942
+
+True Negative NO : 38.4
+False Positive NO : 11.6
+NO : 0.768
+
+True Positive Left : 23.0
+False Negative Left : 2.0
+Left : 0.92
+
+True Positive Right : 24.0
+False Negative Right : 1.0
+Right : 0.96
+Time Elapse: 0h 14m 10s 
+
+
+
+(AUG='hflip', BATCH=42, CONTROLTYPE='CLRM', DATATYPE=60, ENDEPOCH=150, EnsMODE='None', FULEPOCH=67, K=None, KERNEL_SEED=23, LRPMSG='Obl', MODEL='3D_5124', MOM=0.4515840899531089, OPT='SGD', PERCENT=5, RULE='None', SCH='RLRP', SETT='FUL', TALK='HSCNN_reprod_86', TRIAL=27, debug=0, ksize=4, lr=0.022103904768924553, lreduce=0.12440992328892261, lrperiod=6, mgpu=0, wdecay=0.0009429878814002599)  FULEPOCH 67
+
+
+ [Multi Class]
+[206  21  25]
+Accuracy! 0.834
+Folds:[83.44370860927152]
+
+ [Binary Class]
+tn 202, fp 50, fn 2, tp 48
+Accuracy! 0.828
+Folds:[82.78145695364239]
+
+Sensitivity : 0.960
+Specificity : 0.802
+F1_score : 0.649
+AUROC : 0.956
+
+ ======== [BALANCE] ========
+
+[Multi Control]
+Zero: 0.85
+Four: 0.728
+Seven: 0.753
+
+[Binary Control]
+Zero: 0.83
+Four: 0.594
+Seven: 0.756
+
+
+[MULTI]
+No Left Right
+[19.7 21.  25. ]
+Accuracy : 0.875
+
+[BINARY]
+tn fp fn tp
+[38. 12.  2. 48.]
+Accuracy : 0.86
+Sensitivity : 0.960
+Specificity : 0.751
+F1-score : 0.870
+AUROC :0.946
+
+True Negative NO : 37.6
+False Positive NO : 12.4
+NO : 0.752
+
+True Positive Left : 23.0
+False Negative Left : 2.0
+Left : 0.92
+
+True Positive Right : 25.0
+False Negative Right : 0.0
+Right : 1.0
+Time Elapse: 0h 14m 0s 
+
+
+
+(AUG='hflip', BATCH=42, CONTROLTYPE='CLRM', DATATYPE=60, ENDEPOCH=150, EnsMODE='None', FULEPOCH=143, K=None, KERNEL_SEED=33, LRPMSG='Obl', MODEL='3D_5124', MOM=0.4515840899531089, OPT='SGD', PERCENT=5, RULE='None', SCH='RLRP', SETT='FUL', TALK='HSCNN_reprod_86', TRIAL=27, debug=0, ksize=4, lr=0.022103904768924553, lreduce=0.12440992328892261, lrperiod=6, mgpu=0, wdecay=0.0009429878814002599)  FULEPOCH 143
+
+
+ [Multi Class]
+[216  20  22]
+Accuracy! 0.854
+Folds:[85.43046357615894]
+
+ [Binary Class]
+tn 213, fp 39, fn 5, tp 45
+Accuracy! 0.854
+Folds:[85.43046357615894]
+
+Sensitivity : 0.900
+Specificity : 0.845
+F1_score : 0.672
+AUROC : 0.940
+
+ ======== [BALANCE] ========
+
+[Multi Control]
+Zero: 0.88
+Four: 0.730
+Seven: 0.818
+
+[Binary Control]
+Zero: 0.87
+Four: 0.728
+Seven: 0.813
+
+
+[MULTI]
+No Left Right
+[20.6 20.  22. ]
+Accuracy : 0.835
+
+[BINARY]
+tn fp fn tp
+[41.  9.  5. 45.]
+Accuracy : 0.86
+Sensitivity : 0.900
+Specificity : 0.817
+F1-score : 0.865
+AUROC :0.932
+
+True Negative NO : 40.8
+False Positive NO : 9.2
+NO : 0.816
+
+True Positive Left : 22.0
+False Negative Left : 3.0
+Left : 0.88
+
+True Positive Right : 23.0
+False Negative Right : 2.0
+Right : 0.92
+Time Elapse: 0h 14m 21s 
+
+
+
+(AUG='hflip', BATCH=42, CONTROLTYPE='CLRM', DATATYPE=60, ENDEPOCH=150, EnsMODE='None', FULEPOCH=75, K=None, KERNEL_SEED=2, LRPMSG='Obl', MODEL='3D_5124', MOM=0.4515840899531089, OPT='SGD', PERCENT=5, RULE='None', SCH='RLRP', SETT='FUL', TALK='HSCNN_reprod_86', TRIAL=27, debug=0, ksize=4, lr=0.022103904768924553, lreduce=0.12440992328892261, lrperiod=6, mgpu=0, wdecay=0.0009429878814002599)  FULEPOCH 75
+
+
+ [Multi Class]
+[192  22  23]
+Accuracy! 0.785
+Folds:[78.47682119205298]
+
+ [Binary Class]
+tn 188, fp 64, fn 4, tp 46
+Accuracy! 0.775
+Folds:[77.48344370860927]
+
+Sensitivity : 0.920
+Specificity : 0.746
+F1_score : 0.575
+AUROC : 0.921
+
+ ======== [BALANCE] ========
+
+[Multi Control]
+Zero: 0.81
+Four: 0.472
+Seven: 0.711
+
+[Binary Control]
+Zero: 0.79
+Four: 0.451
+Seven: 0.721
+
+
+[MULTI]
+No Left Right
+[17.6 22.  23. ]
+Accuracy : 0.834
+
+[BINARY]
+tn fp fn tp
+[35. 15.  4. 46.]
+Accuracy : 0.81
+Sensitivity : 0.920
+Specificity : 0.695
+F1-score : 0.827
+AUROC :0.913
+
+True Negative NO : 34.8
+False Positive NO : 15.2
+NO : 0.696
+
+True Positive Left : 22.0
+False Negative Left : 3.0
+Left : 0.88
+
+True Positive Right : 24.0
+False Negative Right : 1.0
+Right : 0.96
+Time Elapse: 0h 14m 6s 
+
+
+
+(AUG='hflip', BATCH=42, CONTROLTYPE='CLRM', DATATYPE=60, ENDEPOCH=150, EnsMODE='None', FULEPOCH=65, K=None, KERNEL_SEED=5, LRPMSG='Obl', MODEL='3D_5124', MOM=0.4515840899531089, OPT='SGD', PERCENT=5, RULE='None', SCH='RLRP', SETT='FUL', TALK='HSCNN_reprod_86', TRIAL=27, debug=0, ksize=4, lr=0.022103904768924553, lreduce=0.12440992328892261, lrperiod=6, mgpu=0, wdecay=0.0009429878814002599)  FULEPOCH 65
+
+
+ [Multi Class]
+[203  22  25]
+Accuracy! 0.828
+Folds:[82.78145695364239]
+
+ [Binary Class]
+tn 197, fp 55, fn 3, tp 47
+Accuracy! 0.808
+Folds:[80.79470198675497]
+
+Sensitivity : 0.940
+Specificity : 0.782
+F1_score : 0.618
+AUROC : 0.949
+
+ ======== [BALANCE] ========
+
+[Multi Control]
+Zero: 0.85
+Four: 0.598
+Seven: 0.742
+
+[Binary Control]
+Zero: 0.82
+Four: 0.606
+Seven: 0.733
+
+
+[MULTI]
+No Left Right
+[19. 22. 25.]
+Accuracy : 0.879
+
+[BINARY]
+tn fp fn tp
+[37. 13.  3. 47.]
+Accuracy : 0.84
+Sensitivity : 0.940
+Specificity : 0.744
+F1-score : 0.856
+AUROC :0.935
+
+True Negative NO : 37.2
+False Positive NO : 12.8
+NO : 0.744
+
+True Positive Left : 22.0
+False Negative Left : 3.0
+Left : 0.88
+
+True Positive Right : 25.0
+False Negative Right : 0.0
+Right : 1.0
+Time Elapse: 0h 13m 54s 
+

@@ -1,0 +1,44 @@
+
+
+ [Multi Class]
+[211  23  24]
+Accuracy! 0.854
+Folds:['78.48', '83.11', '83.11', '85.43', '83.44', '85.43']
+
+ [Binary Class]
+tn 209, fp 43, fn 3, tp 47
+Accuracy! 0.848
+Folds:['77.48', '83.11', '82.78', '84.11', '82.78', '85.43']
+
+Sensitivity : 0.940
+Specificity : 0.829
+F1_score : 0.671
+AUROC : 0.959
+
+
+
+ [Multi Class Errors]
+
+ NO : 0.881 (148/15/5)
+
+ FOUR : 0.600 (9/2/4)
+
+ SEVEN : 0.783 (54/8/7)
+
+ LEFT : 0.920 (2/23/0)
+
+ RIGHT : 0.960 (1/0/24)
+
+ [Binary Class Errors]
+
+ NO : 0.881 (148/20)
+
+ FOUR : 0.600 (9/6)
+
+ SEVEN : 0.783 (54/15)
+
+ LEFT : 0.920 (2/23)
+
+ RIGHT : 0.960 (1/24)
+Time Elapse: 0h 11m 45s 
+
