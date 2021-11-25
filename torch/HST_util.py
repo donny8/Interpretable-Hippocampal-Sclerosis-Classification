@@ -11,9 +11,9 @@ def log_intro():
     Report = 'log/[%s%d%s]aLog_%s[%d]{F%dK%d}.txt' %(SETT,TRIAL,AUG,CONTROLTYPE,DATATYPE,FOLD_SEED,KERNEL_SEED)
     Summary = 'log/[%s%d%s]Result_Reports.txt' %(SETT,TRIAL, AUG)
     Rep = open(Report,'a') ; Sum = open(Summary,'a')
-    temp_log = '\n\n TALK %s    MODEL %s   TRIAL %d   KERNEL SEED %d   SETT %s   CONTROLTYPE %s   AUG %s   DATATYPE %d   BATCH %d  LR %0.3f  LR_STEP %d  DROP %d'%(TALK,MODEL,TRIAL,KERNEL_SEED, SETT, CONTROLTYPE, AUG, DATATYPE, BATCH, lr, step, drop_)
+    temp_log = '\n\n'+str(args)[9:]
     if(SETT=='FUL'):
-        temp_log = temp_log + '  ENDEPOCH %d\n' %(ENDEPOCH)
+        temp_log = temp_log + '  FULEPOCH %d\n' %(FULEPOCH)
     else:
         temp_log = temp_log + '\n'
     printer(temp_log,Rep,Sum)
@@ -29,6 +29,17 @@ def printer(temp_log,report,summary):
     report.write(temp_log)
     summary.write(temp_log)    
 
+def seed_set(rdmsd):
+    random.seed(rdmsd)
+    np.random.seed(rdmsd)
+    torch.manual_seed(rdmsd)
+    torch.backends.cudnn.deterministic = True
+    torch.backends.cudnn.benchmark = False
+    if torch.cuda.is_available():
+        torch.cuda.manual_seed(rdmsd)
+    else:
+        print('[CUDA unavailable]'); 
+        sys.exit()
 
 def source_load(categories,dirDataSet):
     inputX, inputY, listFileName, niiInfo = data_single(categories,dirDataSet)    
@@ -78,6 +89,7 @@ def data_single(categories, dirDataSet):
 
 
 def CV_train(inputX,inputY,Y_vector,Rep,Sum):
+    seed_set(KERNEL_SEED)
     avr_trn_acc = [] ; avr_trn_loss = [] ; avr_val_acc = [] ; avr_val_loss = []
     for fold, (train_index, val_index) in enumerate(KFOLD.split(inputX,Y_vector)):
         temp_log = '\nfold %d train_index : %s' %(fold,train_index)
@@ -85,26 +97,39 @@ def CV_train(inputX,inputY,Y_vector,Rep,Sum):
         temp_log = '\nfold %d validation_index : %s' %(fold,val_index)
         Rep.write(temp_log)
         # Fold Initialize
-        trn_loss = torch.zeros(epochs) ; val_loss= torch.zeros(epochs) ; trn_acc = torch.zeros(epochs) ; val_acc = torch.zeros(epochs)
+        trn_loss = torch.zeros(ENDEPOCH) ; val_loss= torch.zeros(ENDEPOCH) ; trn_acc = torch.zeros(ENDEPOCH) ; val_acc = torch.zeros(ENDEPOCH)
         # Model Initialize
-        print('\n\n==> [ Fold %d ] Building model..'%(fold+1))
-        if(MODEL=='3D_5124'):
-            net = HSCNN()
-        net.cuda()
 
-        if(fold==0): summary(net, input_size=(1,160,200,170))
-        optimizer=optim.Adam(params=net.parameters(),lr=learning_rate, betas=(0.9, 0.999), eps=1e-08, weight_decay=decay_rate)
-        scheduler = optim.lr_scheduler.StepLR(optimizer, step_size, gamma = 0.5623413 , last_epoch=-1)
+        print('\n\n==> [ Fold %d ] Building model..'%(fold+1))
+        if(CONTROLTYPE=='CLRM'): net = HSCNN(ksize)
+        net.to(device)
+        if (device == 'cuda') and (ksize==4): net = torch.nn.DataParallel(net)
+
+#        if(fold==0): summary(net, input_size=(1,160,200,170))
+#        scheduler = optim.lr_scheduler.StepLR(optimizer, step_size, gamma = lreduce , last_epoch=-1)
+#        optimizer=optim.Adam(params=net.parameters(),lr=learning_rate, betas=(0.9, 0.999), eps=1e-08, weight_decay=decay_rate)
+        if(OPT=='SGD'): optimizer = optim.SGD(net.parameters(), lr=lr,momentum=MOM, weight_decay=wdecay)
+        elif(OPT == 'Adam'): optimizer = optim.Adam(net.parameters(), lr=lr, betas=(0.9, 0.999), eps=1e-08, weight_decay=wdecay)
+
+        step_size = ENDEPOCH//lrperiod
+        if(SCH=='CALR'):
+            scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=step_size)
+        elif(SCH=='SLR'):
+            scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=step_size, gamma=lreduce)
+        elif(SCH=='RLRP'):
+            scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', patience=step_size, factor=lreduce)
+
         train_loader, val_loader = CV_data_load(inputX,inputY,train_index,val_index,AUG,True)
 
-        for epoch in range(epochs):
+        for epoch in range(ENDEPOCH):
             for param_group in optimizer.param_groups:
                 print("\nCurrent learning rate is: {}".format(param_group['lr']))
-            print('Epoch {} / {}   Fold {} / {}'.format(epoch + 1, epochs, fold + 1 , KFOLD.get_n_splits()))
+            print('Epoch {} / {}   Fold {} / {}'.format(epoch + 1, ENDEPOCH, fold + 1 , KFOLD.get_n_splits()))
             train(net,epoch,optimizer,criterion,trn_acc,trn_loss,train_loader)
-            validation(net,epoch,fold,criterion,val_acc,val_loss,val_loader)
+            vld_loss = validation(net,epoch,fold,criterion,val_acc,val_loss,val_loader)
             realtime_graph(SETT,TRIAL,AUG,KERNEL_SEED,fold,epoch,trn_acc,trn_loss,val_acc,val_loss,os.getcwd()+graph_path)
-            scheduler.step()
+            if(SCH=='RLRP'): scheduler.step(vld_loss)
+            else: scheduler.step()
         acclossGraph(trn_loss,trn_acc,val_loss,val_acc,Rep,fold,os.getcwd()+graph_path)    
         avr_trn_acc.append(trn_acc) ; avr_val_acc.append(val_acc) ; avr_trn_loss.append(trn_loss) ; avr_val_loss.append(val_loss)
 
@@ -112,7 +137,7 @@ def CV_train(inputX,inputY,Y_vector,Rep,Sum):
     argmax_acc = avr_calc(avr_trn_acc,avr_trn_loss,avr_val_acc,avr_val_loss,Rep,Sum,os.getcwd()+graph_path)
 
     for cnt in range(nb_KFold):
-        for ep in range(epochs):
+        for ep in range(ENDEPOCH):
             saveModelName = os.getcwd()+'/saveModel/[%s%d%s]HS%s_D%d{F%dK%d}[%d](%d).pt'%(SETT,TRIAL,AUG,CONTROLTYPE,DATATYPE,FOLD_SEED,KERNEL_SEED,cnt,ep)
             changeModelName = os.getcwd()+'/saveModel/[%s%d%s]HS%s_D%d{F%dK%d}[%d](best).pt'%(SETT,TRIAL,AUG,CONTROLTYPE,DATATYPE,FOLD_SEED,KERNEL_SEED,cnt)
             if os.path.isfile(saveModelName):
@@ -133,12 +158,9 @@ def CV_data_load(inputX,inputY,train_index,val_index,AUG,switch): # switch : tra
         temp_label =  torch.zeros(len(y_train))
 
         for idx in range(len(y_train)):
-            if(y_train[idx] == 1) :
-                temp_label[idx]= 2
-            elif(y_train[idx] == 2) :
-                temp_label[idx]= 1 
-            else :
-                temp_label[idx]= y_train[idx]
+            if(y_train[idx] == 1) : temp_label[idx]= 2
+            elif(y_train[idx] == 2) : temp_label[idx]= 1 
+            else : temp_label[idx]= y_train[idx]
 
         temp_label = temp_label.long()
         x_train = torch.cat([x_train,temp_data],dim=0)
@@ -146,10 +168,8 @@ def CV_data_load(inputX,inputY,train_index,val_index,AUG,switch): # switch : tra
 
     train_data = torch.utils.data.TensorDataset(x_train, y_train)
     val_data = torch.utils.data.TensorDataset(x_val, y_val)
-    if(drop_):
-        train_loader = torch.utils.data.DataLoader(train_data, batch_size =BATCH, shuffle = True, drop_last=True)
-    else:
-        train_loader = torch.utils.data.DataLoader(train_data, batch_size =BATCH, shuffle = True)
+    if(drop_):train_loader = torch.utils.data.DataLoader(train_data, batch_size =BATCH, shuffle = True, drop_last=True)
+    else:train_loader = torch.utils.data.DataLoader(train_data, batch_size =BATCH, shuffle = True)
     val_loader = torch.utils.data.DataLoader(val_data, batch_size = BATCH, shuffle = switch)
     return train_loader, val_loader
 
@@ -158,11 +178,10 @@ def train(net, epoch,optimizer,criterion,trn_acc,trn_loss,train_loader):
     net.train()
     train_acc = 0 ; train_loss = 0 ; correct = 0 ; total = 0
     for batch_index, (images, labels) in enumerate(train_loader):
-        print('images!',images.shape)
         images = images.view(-1,1,imgRow,imgCol,imgDepth)
         images = images.float()
-        images = images.cuda()
-        labels = labels.cuda()
+        images = images.to(device)
+        labels = labels.to(device)
 
         optimizer.zero_grad()
         output = net(images)
@@ -187,15 +206,14 @@ def validation(net,epoch,fold,criterion,val_acc,val_loss,val_loader):
     global best_acc
     net.eval()
     vld_acc = 0 ; vld_loss = 0 ; correct = 0 ; total = 0
-    if(epoch==0):
-        best_acc=0
+    if(epoch==0): best_acc=0
     with torch.no_grad():
         for batch_index, (images, labels) in enumerate(val_loader):
 
             images = images.view(-1,1,imgRow,imgCol,imgDepth)
             images = images.float()
-            images = images.cuda()
-            labels = labels.cuda()
+            images = images.to(device)
+            labels = labels.to(device)
             output = net(images)
             loss = criterion(output,labels)            
             
@@ -207,7 +225,7 @@ def validation(net,epoch,fold,criterion,val_acc,val_loss,val_loader):
             del images, labels
             
     # Save checkpoint.
-    acc = 100.*correct/total
+    acc = correct/total
     if(acc>best_acc):
         best_acc = acc
         print('New Best Accuracy : %f at epoch %d' %(best_acc, epoch))
@@ -216,6 +234,7 @@ def validation(net,epoch,fold,criterion,val_acc,val_loss,val_loader):
 
     val_loss[epoch] = vld_loss/(batch_index+1)
     val_acc[epoch] = 100.*correct/total
+    return vld_loss/(batch_index+1)
     
 
     
@@ -315,19 +334,16 @@ def avr2mean(tensor):
     return mean
 
 def CV_eval(inputX,inputY,Y_vector,Rep,Sum) :
+    
     yIdxPrediction = []
-    multi = [] ; binary = []
+    multi = [] ; binary = []; yPredictionB = []; yLabelPredictionB=[]; 
     for fold, (train_index, val_index) in enumerate(KFOLD.split(inputX,Y_vector)):
         model_path = os.getcwd()+'/saveModel/[%s%d%s]HS%s_D%d{F%dK%d}[%d](best).pt'%(SETT,TRIAL,AUG,CONTROLTYPE,DATATYPE,FOLD_SEED,KERNEL_SEED,fold)
-        if(MODEL=='3D_5124'): 
-            net = HSCNN()
-        elif(MODEL=='3D_simp'):
-            net = HSSIMPLE()
-        elif(MODEL=='test'):
-            net = HSTEST()
-
+        
+        if(CONTROLTYPE=='CLRM'): net = HSCNN(ksize)
+        if (device == 'cuda') and (ksize==4): net = torch.nn.DataParallel(net)
         net.load_state_dict(torch.load(model_path))
-        net.cuda()
+        net.to(device)
 
         train_loader, val_loader = CV_data_load(inputX,inputY,train_index,val_index,AUG,False)
         yLP, yPB, yLPB, multi_acc, binary_acc = evaluation(net,val_loader)
@@ -356,13 +372,13 @@ def evaluation(net,eval_loader):
         for batch_index, (images, labels) in enumerate(eval_loader):
             images = images.view(-1,1,imgRow,imgCol,imgDepth)
             images = images.float()
-            images = images.cuda()
-            labels = labels.cuda()
+            images = images.to(device)
+            labels = labels.to(device)
             output = F.softmax(net(images),dim=1)  
 
             labelsB = labels.detach().clone()
             labelsB[labelsB!=0] = 1
-            labelsB = labelsB.cuda()
+            labelsB = labelsB.to(device)
                                     
             # Multi-to-Binary
             out_yes = output[:,1:3].sum(dim=1)
@@ -476,6 +492,7 @@ def calbalcd(true,label,num,lst):
 
     
 def balance(CONTROLTYPE,SETT,TRIAL,AUG,KERNEL_SEED,iters, C4,C7,C0,C1,C2,num4,num7,num0,RR):
+    np.random.seed(KERNEL_SEED)
     Y_true_M,                yLabelPrediction_M = loader(SETT,TRIAL,AUG, KERNEL_SEED,"M")
     Y_true_B, yPrediction_B, yLabelPrediction_B = loader(SETT,TRIAL,AUG, KERNEL_SEED,"B")
     yPrediction_M = []
@@ -693,40 +710,48 @@ def FUL_data_load(inputX,inputY,testX,testY,AUG,switch): # switch : train/eval
 
     train_data = torch.utils.data.TensorDataset(x_train, y_train)
     val_data = torch.utils.data.TensorDataset(x_val, y_val)
-    if(drop_):
-        train_loader = torch.utils.data.DataLoader(train_data, batch_size =BATCH, shuffle = True, drop_last=True)
-    else:
-        train_loader = torch.utils.data.DataLoader(train_data, batch_size =BATCH, shuffle = True)
+    if(drop_): train_loader = torch.utils.data.DataLoader(train_data, batch_size =BATCH, shuffle = True, drop_last=True)
+    else: train_loader = torch.utils.data.DataLoader(train_data, batch_size =BATCH, shuffle = True)
     val_loader = torch.utils.data.DataLoader(val_data, batch_size = BATCH, shuffle = switch)
     return train_loader, val_loader
 
 
 def FUL_train(inputX,inputY,testX,testY,Rep,Sum):
-    trn_loss = torch.zeros(ENDEPOCH+1) ; val_loss= torch.zeros(ENDEPOCH+1) ; trn_acc = torch.zeros(ENDEPOCH+1) ; val_acc = torch.zeros(ENDEPOCH+1)
+    seed_set(KERNEL_SEED)
+    trn_loss = torch.zeros(FULEPOCH+1) ; val_loss= torch.zeros(FULEPOCH+1) ; trn_acc = torch.zeros(FULEPOCH+1) ; val_acc = torch.zeros(FULEPOCH+1)
     fold = 0
     # Model Initialize
     print('\n\n==> Building model..')
-    if(MODEL=='3D_5124'):
-        net = HSCNN()
-    elif(MODEL=='3D_simp'):
-        net = HSSIMPLE()
-    elif(MODEL=='test'):
-        net = HSTEST()
-    net.cuda()
+    if(CONTROLTYPE=='CLRM'): net = HSCNN(ksize)
+    net.to(device)
+    if (device == 'cuda') and (ksize == 4): net = torch.nn.DataParallel(net)
 
-    summary(net, input_size=(1,160,200,170))
-    optimizer=optim.Adam(params=net.parameters(),lr=learning_rate, betas=(0.9, 0.999), eps=1e-08, weight_decay=decay_rate)
-    scheduler = optim.lr_scheduler.StepLR(optimizer, step_size, gamma = 0.5623413 , last_epoch=-1)
+#    summary(net, input_size=(1,160,200,170))
+    #scheduler = optim.lr_scheduler.StepLR(optimizer, step_size, gamma = lreduce , last_epoch=-1)
+    #optimizer=optim.Adam(params=net.parameters(),lr=learning_rate, betas=(0.9, 0.999), eps=1e-08, weight_decay=decay_rate)
+    if(OPT=='SGD'):
+        optimizer = optim.SGD(net.parameters(), lr=lr,momentum=MOM, weight_decay=wdecay)
+    elif(OPT == 'Adam'):
+        optimizer = optim.Adam(net.parameters(), lr=lr, betas=(0.9, 0.999), eps=1e-08, weight_decay=wdecay)
+        
+    step_size = ENDEPOCH//lrperiod 
+    if(SCH=='CALR'):
+        scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=step_size)
+    elif(SCH=='SLR'):
+        scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=step_size, gamma=lreduce)
+    elif(SCH=='RLRP'):
+        scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', patience=step_size, factor=lreduce)
     train_loader, val_loader = FUL_data_load(inputX,inputY,testX,testY,AUG,True)
 
-    for epoch in range(ENDEPOCH+1):
+    for epoch in range(FULEPOCH+1):
         for param_group in optimizer.param_groups:
             print("\nCurrent learning rate is: {}".format(param_group['lr']))
-        print('Epoch {} / {}  '.format(epoch + 1, ENDEPOCH+1,))
+        print('Epoch {} / {}  '.format(epoch + 1, FULEPOCH+1,))
         train(net,epoch,optimizer,criterion,trn_acc,trn_loss,train_loader)
-        test(net,epoch,fold,criterion,val_acc,val_loss,val_loader)
+        tst_loss = test(net,epoch,fold,criterion,val_acc,val_loss,val_loader)
         realtime_graph(SETT,TRIAL,AUG,KERNEL_SEED,fold,epoch,trn_acc,trn_loss,val_acc,val_loss,os.getcwd()+graph_path)
-        scheduler.step()
+        if(SCH=='RLRP'): scheduler.step(tst_loss)
+        else: scheduler.step()
     acclossGraph(trn_loss,trn_acc,val_loss,val_acc,Rep,fold,os.getcwd()+graph_path)
 
     del net, train_loader, val_loader
@@ -752,7 +777,7 @@ def test(net,epoch,fold,criterion,val_acc,val_loss,val_loader):
             progress_bar(batch_index,len(val_loader), 'Loss: %.3f | Acc: %.3f%% ( %d / %d )' % (vld_loss/(batch_index+1), 100.*correct/total,correct, total))
             del images, labels
     
-    if(epoch==ENDEPOCH):
+    if(epoch==FULEPOCH):
         final_acc = 100.*correct/total
         print('Final Accuracy : %f at %d th epoch ' %(final_acc, epoch+1))
         savePath = './saveModel/[%s%d%s]HS%s_D%d{F%dK%d}[best].pt'%(SETT,TRIAL,AUG,CONTROLTYPE,DATATYPE,FOLD_SEED,KERNEL_SEED)
@@ -760,6 +785,7 @@ def test(net,epoch,fold,criterion,val_acc,val_loss,val_loader):
 
     val_loss[epoch] = vld_loss/(batch_index+1)
     val_acc[epoch] = 100.*correct/total
+    return vld_loss/(batch_index+1)
     
     
 def FUL_eval(inputX,inputY,testX,testY,Rep,Sum) :
@@ -768,15 +794,12 @@ def FUL_eval(inputX,inputY,testX,testY,Rep,Sum) :
     multi = [] ; binary = []
     fold=0
     model_path = os.getcwd()+'/saveModel/[%s%d%s]HS%s_D%d{F%dK%d}[best].pt'%(SETT,TRIAL,AUG,CONTROLTYPE,DATATYPE,FOLD_SEED,KERNEL_SEED)
-    if(MODEL=='3D_5124'): 
-        net = HSCNN()
-    elif(MODEL=='3D_simp'):
-        net = HSSIMPLE()
-    elif(MODEL=='test'):
-        net = HSTEST()
 
+    if(CONTROLTYPE=='CLRM'): net = HSCNN(ksize)
+    elif('ADNI' in CONTROLTYPE): net = ADNICNN(ksize)
+    net.to(device)
+    if (device == 'cuda') and (ksize == 4): net = torch.nn.DataParallel(net)
     net.load_state_dict(torch.load(model_path))
-    net.cuda()
 
     train_loader, tst_loader = FUL_data_load(inputX,inputY,testX,testY,AUG,False)
     yLP, yPB, yLPB, multi_acc, binary_acc = evaluation(net,tst_loader)

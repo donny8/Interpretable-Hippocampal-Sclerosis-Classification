@@ -1,14 +1,18 @@
 from HST_common import *
 
     
+
 class Torch3D(nn.Module):
 
-    def __init__(self,num_classes=nb_classes):
+    def __init__(self,ksize,num_classes=nb_classes):
         super().__init__()
+        self.ksize = ksize
+        if(self.ksize==3): self.linear=48000
+        elif(self.ksize==4): self.linear=35640
 
         NumFilter = [5,10,20,40,60] # Number of Convolutional Filters to use
         NumDense = [64,64,3]
-        kernel_size = [3,3,3] # Convolution Kernel Size
+        kernel_size = [self.ksize,self.ksize,self.ksize] # Convolution Kernel Size
         stride_size = (1,1,1) # Convolution Stride Size
         pad_size = [1,1,1] # Convolution Zero Padding Size
         pool_size = [2,2,2]
@@ -32,7 +36,7 @@ class Torch3D(nn.Module):
             )
         
         self.classifier = nn.Sequential(
-            nn.Linear(48000, 64, bias=True),
+            nn.Linear(self.linear, 64, bias=True),
             nn.BatchNorm1d(64),
             nn.ReLU(),
             nn.Dropout(p=drop_rate),
@@ -47,11 +51,7 @@ class Torch3D(nn.Module):
         
     def forward(self, x):
         x = self.extractor(x)
-        x = x.view(-1,48000)
+        x = x.view(-1,self.linear)
         x = self.classifier(x)
         
         return x
-
-
-def HSCNN():
-    return Torch3D()

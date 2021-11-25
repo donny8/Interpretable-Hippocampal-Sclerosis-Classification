@@ -66,13 +66,13 @@ class CLASS_ENSB :
 
             ## model load ##
             if(MODEL=='3D_5124'): 
-                temp_net = HSCNN()
+
+                if(CONTROLTYPE=='CLRM'): temp_net = HSCNN(ksize)
+                elif('ADNI' in CONTROLTYPE): temp_net = ADNICNN(ksize)
+                if (device == 'cuda')and(ksize==4): temp_net = torch.nn.DataParallel(temp_net)
             if(SETT=='SIG')or(SETT=='MM'):
                 model_path = os.getcwd()+'/saveModel/[%s%d%s]HS%s_D%d{F%dK%d}[%d](best).pt'%(SETT,TRIAL,AUG,CONTROLTYPE,DATATYPE,FOLD_SEED,KERNELS[kerCnt],self.foldNum)
             elif(SETT=='FUL'):
-                if(kerCnt>=5):
-                    model_path = os.getcwd()+'/saveModel/[%s76%s]HS%s_D62{F%dK%d}[best].pt'%(SETT,AUG,CONTROLTYPE,FOLD_SEED,KERNELS[kerCnt])
-                else:
                     model_path = os.getcwd()+'/saveModel/[%s%d%s]HS%s_D%d{F%dK%d}[best].pt'%(SETT,TRIAL,AUG,CONTROLTYPE,DATATYPE,FOLD_SEED,KERNELS[kerCnt])
             print(model_path)
             if os.path.isfile(model_path):
@@ -105,20 +105,20 @@ class CLASS_ENSB :
             elif(SETT=='FUL'):
                 _, val_loader = FUL_data_load(inputX,inputY,inputX,inputY,AUG,False)
             total = 0 ; totalB = 0 ; correct = 0 ; correctB = 0
-            cntModel.cuda()
+            cntModel.to(device)
             cntModel.eval()
 
             with torch.no_grad():
                 for batch_index, (images, labels) in enumerate(val_loader):
                     images = images.view(-1,1,imgRow,imgCol,imgDepth)
                     images = images.float()
-                    images = images.cuda()
-                    labels = labels.cuda()
+                    images = images.to(device)
+                    labels = labels.to(device)
                     output = F.softmax(cntModel(images),dim=1)  
 
                     labelsB = labels.detach().clone()
                     labelsB[labelsB!=0] = 1
-                    labelsB = labelsB.cuda()
+                    labelsB = labelsB.to(device)
 
                     # Multi-to-Binary
                     out_yes = output[:,1:3].sum(dim=1)
@@ -273,7 +273,6 @@ class CLASS_ENSB :
 
     def eval_class(self,Y_vector,fw):
 
-        yLabelPrediction = self.yLabelPrediction
         
         # Specific Evaluation for each class
         LEFT_NO=0; LEFT_TRUE=0 ; LEFT_RIGHT=0
