@@ -19,15 +19,21 @@ def get_args():
     parser.add_argument('--TRIAL',type=int, default=1)
     parser.add_argument('--AUG',type=str, default='hflip')
     parser.add_argument('--DATATYPE',type=int)
-    parser.add_argument('--BATCH',type=int, default=16)
+    parser.add_argument('--BATCH',type=int, default=42)
     parser.add_argument('--TALK',type=str)
-    parser.add_argument('--ENDEPOCH',type=int, default=200)
+    parser.add_argument('--ENDEPOCH',type=int, default=300)
+    parser.add_argument('--FULEPOCH',type=int, default=299)
+    parser.add_argument('--OPT',default='Adam',type=str)
+    parser.add_argument('--SCH',default='SLR',type=str)
+    parser.add_argument('--MOM',default=0.9,type=float)
 
     parser.add_argument('--mgpu',default=0,type=int, help='debug mode')
     parser.add_argument('--debug',default=0,type=int, help='debug mode')
-    parser.add_argument('--drop',default=0,type=int, help='Whether to drop last in batch')
-    parser.add_argument('--step',default=75,type=int, help='Random Sampling')
     parser.add_argument('--lr',default=1e-2,type=float)
+    parser.add_argument('--lreduce',default=0.5623413,type=float)
+    parser.add_argument('--lrperiod',default=4,type=int)
+    parser.add_argument('--wdecay',default=5e-4,type=float)
+    parser.add_argument('--ksize',default=3,type=int)
 
     ##======================== Ensemble ========================##
 
