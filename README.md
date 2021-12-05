@@ -6,33 +6,33 @@
 This repo contains Keras and PyTorch implementations of a deep learning framework that delineates interpretable Hippocampal Sclerosis(HS) prediction from Magnetic Resonance Imaging. We implemented a framework using a 3D convolutional neural network that was trained in an end to end fashion and generated an interpretation for the prediction through the Layerwise-relevance propagation method (Bach et al., 2015). See below. 
 
 <p align="center">
-  <img src="plot/Fig_1B.png" height="280"/> 
+  <img src="fig/Fig_1B.png" height="280"/> 
 </p>
 
 The CNN model was developed on the HS dataset that was provided by the Seoul National University Hospital and evaluated through both 5-fold cross validation (CV) and using a separate balanced test dataset. By combining the prediction probabilities for the Left and Right HS classes and comparing it with the probability for the No HS class, we not only considered a multi-class classification setting, but also an easier binary classification setting in which the goal is to simply determine whether a person has HS or not.
 
 
 <p align="center">
-  <img src="plot/Fig_1C.png" height="300"/> 
+  <img src="fig/Fig_1C.png" height="300"/> 
 </p>
 
 The training dataset was comprised 160 controls, 100 Left and 60 Right HS participants, and the test dataset was consisted of 252 control, 25 Left and 25 Right HS participants. Since the test dataset was imbalanced, we randomly sampled 25 and 50 participants from the control group 100 times to make a balanced test datasets for multi-class and binary classification. Since the test dataset was imbalanced, we randomly sampled 25 and 50 participants from the control group 100 times to make a balanced test datasets for multi-class and binary classification. We employed the average and voting ensemble methods to improve the prediction accuracy. For the test dataset, we plot the accuracies among several single models and their ensemble, and the average ROC curve of the Voting Ensemble method for the multi-class and binary classification settings, respectively.
 
 <p align="center">
-  <img src="plot/Table_1.png" height="300"/> <img src="plot/Fig_2A.png" height="300"/>
-  <img src="plot/Table_2.png" height="300"/> <img src="plot/Fig_2B.png" height="300"/>
+  <img src="fig/Table1.png" height="300"/> <img src="fig/Fig_2A.png" height="300"/>
+  <img src="fig/Table2.png" height="300"/> <img src="fig/Fig_2B.png" height="300"/>
 </p>
 
 Once the model makes a prediction for a given individual 3D brain image, LRP recursively runs the relevance propagation step, which is similar to the standard back-propagation for neural networks training, to decompose and distribute the final prediction score to each input voxel. The decomposed score, dubbed as the relevance score, of LRP represents the importance of each voxel for the given prediction, and we obtain the saliency-map of the important voxels by visualizing the relevance scores higher than an appropriate threshold. We presented the interpretation both in individual and group-level.
 
 <p align="center">
-  <img src="plot/Fig_3.png" width="475"/>  <img src="plot/Fig_4.png" width="475"/>
+  <img src="fig/Fig_3.png" width="475"/>  <img src="fig/Fig_4.png" width="475"/>
 </p>
 
 We applied a dimension reduction method called Uniform manifold approximation and projection (Mclnnes et al., 2018) to the output of the last convolutional layer in our 3D CNN. Figure 5 shows the projection of the feature embeddings to the two-dimensional space, and the solid circles and light triangles correspond to the training and test data samples, respectively.
 
 <p align="center">
-  <img src="plot/Fig_5.png" height="650"/> 
+  <img src="fig/Fig_5.png" height="650"/> 
 </p>
 
 
@@ -106,7 +106,7 @@ python back_remove.py
 ```
     
 <p align="center">
-  <img src="plot/Fig_1A.png" height="225"/> 
+  <img src="fig/Fig_1A.png" height="225"/> 
 </p>
 
 ## Code dependencies
