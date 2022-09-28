@@ -13,7 +13,7 @@ The CNN model was developed on the HS dataset that was provided by the Seoul Nat
 
 
 <p align="center">
-  <img src="fig/Fig1_C.png" height="300"/> 
+  <img src="fig/Fig1_c.png" height="300"/> 
 </p>
 
 The training dataset was comprised 160 controls, 100 Left and 60 Right HS participants, and the test dataset was consisted of 252 control, 25 Left and 25 Right HS participants. Since the test dataset was imbalanced, we randomly sampled 25 and 50 participants from the control group 100 times to make a balanced test datasets for multi-class and binary classification. Since the test set was imbalanced, we took an average of the accuracy achieved within each group to measure a balanced accuracy for multiclass and binary classifications. We employed the voting ensemble to improve the prediction accuracy. For the test dataset, we plot the accuracies among several single models and their ensemble, and the ROC curve of the Voting Ensemble method for the multi-class and binary classification settings, respectively.
