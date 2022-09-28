@@ -1,6 +1,6 @@
-from HST_common import *
-from HST_model import *
-from HST_util import *
+from .common import *
+from .model import *
+from .util import *
 
 def log_ensemble():
     storage = 'log/ensembleStorage.txt'
@@ -18,26 +18,6 @@ elif(SETT=='SIG')or(SETT=='MM'):
     iC = imgCount
     iCN0 = imgCountNO_0   ;  iCN4 = imgCountNO_4  ;  iCN7 = imgCountNO_7
     iCY1 = imgCountYES_1 ;  iCY2 = imgCountYES_2
-
-
-def MAIN_ENSB(inputX,inputY,Y_vector,fw,fwSt):
-    ensb = CLASS_ENSB(iC, iCN4, iCN7, iCN0, iCY1,iCY2)
-    if(SETT=='SIG')or(SETT=='MM'):
-        for train_index, val_index in KFOLD.split(inputX,Y_vector):
-            ensb.GET_ENSB(train_index,val_index)
-            ensb.MODL_ENSB()    
-            ensb.PRE_ENSB(inputX,inputY)   
-        yIdxPrediction, yLabelPrediction, yPredictionB, yLabelPredictionB,accuracy,accuracyB = ensb.SET_ENSB()
-        acc_roc(accuracy,accuracyB,yIdxPrediction,yLabelPrediction,yPredictionB,yLabelPredictionB,fw,fwSt,iters,graph_path,imgCountNO_4,imgCountNO_7,imgCountNO_0,imgCountYES_1,imgCountYES_2)
-    elif(SETT=='FUL'):
-        tst_index = np.arange(len(inputY))
-        ensb.GET_ENSB(tst_index,tst_index)
-        ensb.MODL_ENSB()    
-        ensb.PRE_ENSB(inputX,inputY)    
-        yIdxPrediction, yLabelPrediction, yPredictionB, yLabelPredictionB,accuracy,accuracyB = ensb.SET_ENSB()
-        acc_roc(accuracy,accuracyB,yIdxPrediction,yLabelPrediction,yPredictionB,yLabelPredictionB,fw,fwSt,iters,graph_path,tstCountNO_4,tstCountNO_7,tstCountNO_0,tstCountYES_1,tstCountYES_2)
-        
-    ensb.RESULT_ENSB(fw)
 
 class CLASS_ENSB :
     def __init__(self,iC, iCN4, iCN7, iCN0, iCY1, iCY2):
@@ -68,12 +48,12 @@ class CLASS_ENSB :
             if(MODEL=='3D_5124'): 
 
                 if(CONTROLTYPE=='CLRM'): temp_net = HSCNN(ksize)
-                elif('ADNI' in CONTROLTYPE): temp_net = ADNICNN(ksize)
-                if (device == 'cuda')and(ksize==4): temp_net = torch.nn.DataParallel(temp_net)
+                if (device == 'cuda'): 
+                    temp_net = torch.nn.DataParallel(temp_net)
             if(SETT=='SIG')or(SETT=='MM'):
                 model_path = os.getcwd()+'/saveModel/[%s%d%s]HS%s_D%d{F%dK%d}[%d](best).pt'%(SETT,TRIAL,AUG,CONTROLTYPE,DATATYPE,FOLD_SEED,KERNELS[kerCnt],self.foldNum)
             elif(SETT=='FUL'):
-                    model_path = os.getcwd()+'/saveModel/[%s%d%s]HS%s_D%d{F%dK%d}[best].pt'%(SETT,TRIAL,AUG,CONTROLTYPE,DATATYPE,FOLD_SEED,KERNELS[kerCnt])
+                model_path = os.getcwd()+'/saveModel/[%s%d%s]HS%s_D%d{F%dK%d}[best].pt'%(SETT,TRIAL,AUG,CONTROLTYPE,DATATYPE,FOLD_SEED,KERNELS[kerCnt])
             print(model_path)
             if os.path.isfile(model_path):
                 temp_net.load_state_dict(torch.load(model_path))

@@ -1,4 +1,4 @@
-from HST_common import *
+from .common import *
 import matplotlib.pyplot as plt
 from Args.argument import get_args
 args=get_args()

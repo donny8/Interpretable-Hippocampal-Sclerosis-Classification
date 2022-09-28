@@ -1,6 +1,9 @@
-from HST_common import *
+import torch
+import torch.nn as nn
 
-    
+ksize = 4
+nb_classes = 3
+drop_rate = 0.5
 
 class Torch3D(nn.Module):
 
@@ -55,3 +58,14 @@ class Torch3D(nn.Module):
         x = self.classifier(x)
         
         return x
+
+def HSCNN(ksize):
+    return Torch3D(ksize)
+
+
+model_path = '/home/ubuntu/dokim/HS/01.HS_Project/Interpretable-Hippocampal-Sclerosis-Classification/torch/saveModel/[SIG9999hflip]HSCLRM_D64{F1K1}[0](best).pt'
+
+net = HSCNN(ksize=4)
+print(net)
+net = torch.nn.DataParallel(net)
+net.module.load_state_dict(torch.load(model_path))

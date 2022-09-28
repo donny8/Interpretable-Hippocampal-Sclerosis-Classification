@@ -1,36 +1,21 @@
-import os
-#try:
-#	os.chdir(os.path.join(os.getcwd(), '..\LRP'))
-#	print(os.getcwd())
-#except:
-#	pass
-
-#import warnings
-#warnings.simplefilter('ignore')
-#from PIL import Image
-#from scipy.stats import describe
-
-#import sys
-#sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
-from HST_common import *
-from HST_model import *
-from HST_util import *
-from HST_util_lrp import *
+from utils.common import *
+from utils.model import *
+from utils.util import *
+from utils.util_lrp import *
 import gc
-#import imp
-#import scipy.misc
 import math
 import gzip
-#import matplotlib.pyplot as plot
 
 
 foldNum = 0 
 police=[]; inputX = []; inputY=[] ;listFileName = []
 
-if(SETT=='FUL'): dirDataSet = tstDataSet
+if(SETT=='FUL'): 
+    dirDataSet = tstDataSet
 #inputX, inputY, Y_vector, listFileName, niiInfo = source_load(categories, dirDataSet)
 inputX, inputY, Y_vector, listFileName, niiInfo = source_load(categories, dirDataSet)
-    
+
+mkdir('./3D_output')    
 dir_path = os.getcwd()+'/3D_output/%s_T%d_%d%s' %(CONTROLTYPE,TRIAL,DATATYPE,LRPMSG)
 if(not(os.path.isdir(dir_path))):
         os.mkdir(dir_path)
@@ -59,7 +44,10 @@ for train, validation in KFOLD.split(inputX,Y_vector):
         os.mkdir(lrp_path)
 
     ## model load ##
-    if(MODEL=='3D_5124'): model = HSCNN()
+    if(MODEL=='3D_5124'): 
+        model = HSCNN(ksize=4)
+        if (device == 'cuda'): 
+            model = torch.nn.DataParallel(model)
         
     if(SETT=='SIG'):
         model_path = os.getcwd()+'/saveModel/[%s%d%s]HS%s_D%d{F%dK%d}[%d](best).pt'%(SETT,TRIAL,AUG,CONTROLTYPE,DATATYPE,FOLD_SEED,KERNEL_SEED,foldNum)

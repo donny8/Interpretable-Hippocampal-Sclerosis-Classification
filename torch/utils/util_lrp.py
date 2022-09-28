@@ -1,6 +1,6 @@
-from HST_common import *
-from HST_model import *
-from HST_util import *
+from .common import *
+from .model import *
+from .util import *
 import inspect
 import shutil
 import requests

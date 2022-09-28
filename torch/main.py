@@ -1,5 +1,5 @@
-from HST_common import *
-from HST_util import *
+from utils.common import *
+from utils.util import *
 
 def main():
     Rep, Sum = log_intro()

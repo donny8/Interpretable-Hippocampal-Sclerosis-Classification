@@ -1,15 +1,19 @@
-from HST_common import *
-from HST_model import *
-from HST_figure import acclossGraph
+from .common import *
+from .model import *
+from .figure import acclossGraph
 import inspect
 import shutil
 import requests
 
+def mkdir(path):
+    if not(os.path.isdir(path)):
+        os.mkdir(path)
 
 def log_intro():
     # log file
-    Report = 'log/[%s%d%s]aLog_%s[%d]{F%dK%d}.txt' %(SETT,TRIAL,AUG,CONTROLTYPE,DATATYPE,FOLD_SEED,KERNEL_SEED)
-    Summary = 'log/[%s%d%s]Result_Reports.txt' %(SETT,TRIAL, AUG)
+    mkdir('./log')
+    Report = './log/[%s%d%s]aLog_%s[%d]{F%dK%d}.txt' %(SETT,TRIAL,AUG,CONTROLTYPE,DATATYPE,FOLD_SEED,KERNEL_SEED)
+    Summary = './log/[%s%d%s]Result_Reports.txt' %(SETT,TRIAL, AUG)
     Rep = open(Report,'a') ; Sum = open(Summary,'a')
     temp_log = '\n\n'+str(args)[9:]
     if(SETT=='FUL'):
@@ -90,6 +94,7 @@ def data_single(categories, dirDataSet):
 
 def CV_train(inputX,inputY,Y_vector,Rep,Sum):
     seed_set(KERNEL_SEED)
+    mkdir('./saveModel')
     avr_trn_acc = [] ; avr_trn_loss = [] ; avr_val_acc = [] ; avr_val_loss = []
     for fold, (train_index, val_index) in enumerate(KFOLD.split(inputX,Y_vector)):
         temp_log = '\nfold %d train_index : %s' %(fold,train_index)
@@ -168,8 +173,7 @@ def CV_data_load(inputX,inputY,train_index,val_index,AUG,switch): # switch : tra
 
     train_data = torch.utils.data.TensorDataset(x_train, y_train)
     val_data = torch.utils.data.TensorDataset(x_val, y_val)
-    if(drop_):train_loader = torch.utils.data.DataLoader(train_data, batch_size =BATCH, shuffle = True, drop_last=True)
-    else:train_loader = torch.utils.data.DataLoader(train_data, batch_size =BATCH, shuffle = True)
+    train_loader = torch.utils.data.DataLoader(train_data, batch_size =BATCH, shuffle = True, drop_last=True)
     val_loader = torch.utils.data.DataLoader(val_data, batch_size = BATCH, shuffle = switch)
     return train_loader, val_loader
 
@@ -228,7 +232,7 @@ def validation(net,epoch,fold,criterion,val_acc,val_loss,val_loader):
     acc = correct/total
     if(acc>best_acc):
         best_acc = acc
-        print('New Best Accuracy : %f at epoch %d' %(best_acc, epoch))
+        print(f'New Best Accuracy : {best_acc:.3f} at epoch {epoch}')
     savePath = './saveModel/[%s%d%s]HS%s_D%d{F%dK%d}[%d](%d).pt'%(SETT,TRIAL,AUG,CONTROLTYPE,DATATYPE,FOLD_SEED,KERNEL_SEED,fold,epoch)
     torch.save(net.state_dict(), savePath)
 
@@ -477,7 +481,7 @@ def acc_roc(multi,binary,yIdxPrediction,yLabelPrediction,yPredictionB,yLabelPred
         num4=10 ; num7=20 ; num0=20
     elif(SETT=='SIG'):
         num4=24 ; num7=48 ; num0=48        
-    balance(CONTROLTYPE,SETT,TRIAL,AUG,KERNEL_SEED,iters, NO4, NO7,NO0,YES1,YES2,num4,num7,num0,Sum)
+#    balance(CONTROLTYPE,SETT,TRIAL,AUG,KERNEL_SEED,iters, NO4, NO7,NO0,YES1,YES2,num4,num7,num0,Sum)
     
 def calbalcd(true,label,num,lst):
     check = len(true[true==num])
@@ -710,8 +714,7 @@ def FUL_data_load(inputX,inputY,testX,testY,AUG,switch): # switch : train/eval
 
     train_data = torch.utils.data.TensorDataset(x_train, y_train)
     val_data = torch.utils.data.TensorDataset(x_val, y_val)
-    if(drop_): train_loader = torch.utils.data.DataLoader(train_data, batch_size =BATCH, shuffle = True, drop_last=True)
-    else: train_loader = torch.utils.data.DataLoader(train_data, batch_size =BATCH, shuffle = True)
+    train_loader = torch.utils.data.DataLoader(train_data, batch_size =BATCH, shuffle = True, drop_last=True)
     val_loader = torch.utils.data.DataLoader(val_data, batch_size = BATCH, shuffle = switch)
     return train_loader, val_loader
 
