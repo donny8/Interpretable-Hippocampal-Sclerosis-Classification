@@ -133,7 +133,7 @@ python HS_main.py --CONTROLTYPE CLRM --SETT SIG --AUG hflip --KERNEL_SEED 1 --TR
 
 For Pytorch,
 ```
-python HST_main.py --CONTROLTYPE CLRM --SETT SIG --AUG hflip --KERNEL_SEED 3 --TRIAL 03 --DATATYPE 60 --BATCH 42 --MODEL 3D_5124 --step 50 --TALK M5124_3 --drop 1
+python main.py --CONTROLTYPE CLRM --SETT SIG --AUG hflip --KERNEL_SEED 3 --TRIAL 03 --DATATYPE 60 --BATCH 42 --MODEL 3D_5124 --step 50 --TALK M5124_3 --drop 1
 ```
 
 Descriptions for each option are described in the "/Args/argument.py".
@@ -149,7 +149,7 @@ python HS_ensemble.py --AUG hflip --TRIAL 9 --SETT SIG --DATATYPE 64 --CONTROLTY
 
 For Pytorch,
 ```
-python HST_ensemble.py --CONTROLTYPE CLRM --SETT SIG --AUG hflip --KERNEL_SEED 333 --TRIAL 45 --DATATYPE 60 --BATCH 42 --MODEL 3D_5124 --step 50 --TALK AVR_ensemble --K1 2  --K2 14 --K3 19 --K4 23 --K5 33 --EnsMODE AVR
+python ensemble.py --CONTROLTYPE CLRM --SETT SIG --AUG hflip --KERNEL_SEED 333 --TRIAL 45 --DATATYPE 60 --BATCH 42 --MODEL 3D_5124 --step 50 --TALK AVR_ensemble --K1 2  --K2 14 --K3 19 --K4 23 --K5 33 --EnsMODE AVR
 ```
 
 EnsMODE controls the ensemble mode.
@@ -166,7 +166,7 @@ python HS_LRP.py --SETT SIG --TRIAL 1 --RULE lrp.z --KERNEL_SEED 1 --CONTROLTYPE
     
 For Pytorch,
 ```
-python HST_lrp.py --SETT SIG --TRIAL 03 --RULE lrp.z --KERNEL_SEED 14 --CONTROLTYPE CLRM --AUG hflip --DATATYPE 60 --PERCENT 0 --LRPMSG Directory_name --MODEL 3D_5124
+python lrp.py --SETT SIG --TRIAL 03 --RULE lrp.z --KERNEL_SEED 14 --CONTROLTYPE CLRM --AUG hflip --DATATYPE 60 --PERCENT 0 --LRPMSG Directory_name --MODEL 3D_5124
 ```
 
 Controls the cutoff values using the PERCENT.
