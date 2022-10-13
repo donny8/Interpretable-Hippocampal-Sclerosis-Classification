@@ -1,5 +1,5 @@
 # Interpretable Deep Learning based Hippocampal Sclerosis Classification 
-
+An implementation of the paper [Interpretable Deep Learning based Hippocampal Sclerosis Classification](https://onlinelibrary.wiley.com/doi/10.1002/epi4.12655).
 
 ## Introduction
 
